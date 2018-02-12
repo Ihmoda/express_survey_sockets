@@ -1,0 +1,15 @@
+.card {
+  padding: 20px !important;
+}
+
+.container {
+  padding: 20px !important;
+}
+
+.message {
+  height: 200px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  visibility: hidden;
+  background-color: lightgreen !important;
+}

@@ -2,7 +2,9 @@
 
 <head>
     <title></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/style.css' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
@@ -10,19 +12,88 @@
             // this triggers the connection event in our server!
             var socket = io.connect();
             // we'll write all the socket stuff after the above line!
-            $('button').click(function () {
-                socket.emit('button_clicked', { reason: 'because I want to learn about sockets!' });
+            $('#complete-survey').click(function () {
+                var data = {
+                    username: $('#username').val(),
+                    location: $('#location').val(),
+                    language: $('#language').val(),
+                    comment: $('#comment').val()
+                }
+                socket.emit('button_clicked', data);
             });
             socket.on('server_response', function (data) {
-                console.log('The server says: ' + data.response);
+                var new_data = JSON.stringify(data.survey_data)
+                var info = "You emitted the following information to the server:" + new_data
+                var random_number = "Your lucky number emitted by the server is " + data.number + "."
+                console.log(info);
+                console.log(random_number);
+                $('#usermessage').html("");
+                $('#usermessage').append("<p>" + info + "</p>");
+                $('#usermessage').append("<p>" + random_number + "</p>");
+                $('.message').css('visibility', 'visible');
             });
         })
     </script>
 </head>
 
 <body>
-    <button>I AM A BUTTON!</button>
-    <!-- web page goes here -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="card message">
+                    <div class="card-block" id="usermessage">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-block">
+                        <h4 class="card-title">Dojo Survey</h4>
+                        <form>
+                            <div class="form-group">
+                                <label for="username">Your Name:</label>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Enter your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Select Your Location</label>
+                                <select class="form-control" name="location" id="location">
+                                    <option>San Jose</option>
+                                    <option>Seattle</option>
+                                    <option>Berkeley</option>
+                                    <option>Tulsa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="language">Favorite Language</label>
+                                <select class="form-control" name="language" id="language">
+                                    <option>JavaScript</option>
+                                    <option>Python</option>
+                                    <option>Swift</option>
+                                    <option>Ruby</option>
+                                    <option>C#</option>
+                                    <option>Haskell</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Enter a comment (optional)</label>
+                                <textarea class="form-control" name="comment" id="comment" rows="8" placeholder="Enter your comment here"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" id="complete-survey" class="btn btn-primary float-right">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
 </body>
 
 </html>

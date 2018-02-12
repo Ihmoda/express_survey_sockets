@@ -24,8 +24,9 @@ io.sockets.on('connection', function(socket) {
   console.log('Client/socket id is: ', socket.id);
   //all the server socket code goes in here
   socket.on('button_clicked', function(data) {
-    console.log('Someone clicked a button! Reason: ' + data.reason);
-    socket.emit('server_response', { response: 'sockets are the best!' });
+    console.log('Someone clicked a button! Reason: ' + data.username);
+    var random_number = Math.floor(Math.random() * 1000);
+    socket.emit('server_response', { survey_data: data, number: random_number });
   });
   //  EMIT:
   //socket.emit('my_emit_event');
